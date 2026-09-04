@@ -49,3 +49,15 @@ terraform --version
 kubectl version --client
 helm version
 git --version
+
+## Alerting
+
+The project includes an alerting layer using OpenObserve.
+
+### High Error Rate Alert
+
+A scheduled OpenObserve alert monitors the `dummy_logs` stream and
+filters records where:
+
+```text
+level = error
