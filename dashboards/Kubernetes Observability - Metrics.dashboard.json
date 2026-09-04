@@ -1,0 +1,209 @@
+{
+  "version": 3,
+  "dashboardId": "7501491247538765903",
+  "title": "Kubernetes Observability - Metrics",
+  "description": "",
+  "role": "",
+  "owner": "",
+  "created": "2026-09-04T07:02:27.345Z",
+  "tabs": [
+    {
+      "tabId": "default",
+      "name": "Default",
+      "panels": [
+        {
+          "id": "Panel_ID4433510",
+          "type": "line",
+          "title": "CPU Usage (%)",
+          "description": "",
+          "config": {
+            "show_legends": true,
+            "legends_position": null,
+            "base_map": {
+              "type": "osm"
+            },
+            "map_view": {
+              "zoom": 1,
+              "lat": 0,
+              "lng": 0
+            }
+          },
+          "queryType": "promql",
+          "queries": [
+            {
+              "query": "dummy_metrics{metric_name=\"cpu_usage_percent\"}",
+              "customQuery": true,
+              "fields": {
+                "stream": "",
+                "stream_type": "metrics",
+                "x": [],
+                "y": [],
+                "z": [],
+                "filter": []
+              },
+              "config": {
+                "promql_legend": "",
+                "layer_type": "scatter",
+                "weight_fixed": 1,
+                "limit": 0,
+                "min": 0,
+                "max": 100
+              }
+            }
+          ],
+          "layout": {
+            "x": 0,
+            "y": 0,
+            "w": 24,
+            "h": 9,
+            "i": 1
+          }
+        },
+        {
+          "id": "Panel_ID1514710",
+          "type": "line",
+          "title": "Memory Usage (Bytes)",
+          "description": "",
+          "config": {
+            "show_legends": true,
+            "legends_position": null,
+            "base_map": {
+              "type": "osm"
+            },
+            "map_view": {
+              "zoom": 1,
+              "lat": 0,
+              "lng": 0
+            }
+          },
+          "queryType": "promql",
+          "queries": [
+            {
+              "query": "dummy_metrics{metric_name=\"memory_usage_bytes\"}",
+              "customQuery": true,
+              "fields": {
+                "stream": "",
+                "stream_type": "metrics",
+                "x": [],
+                "y": [],
+                "z": [],
+                "filter": []
+              },
+              "config": {
+                "promql_legend": "",
+                "layer_type": "scatter",
+                "weight_fixed": 1,
+                "limit": 0,
+                "min": 0,
+                "max": 100
+              }
+            }
+          ],
+          "layout": {
+            "x": 24,
+            "y": 0,
+            "w": 24,
+            "h": 9,
+            "i": 2
+          }
+        },
+        {
+          "id": "Panel_ID6463110",
+          "type": "line",
+          "title": "Request Rate",
+          "description": "",
+          "config": {
+            "show_legends": true,
+            "legends_position": null,
+            "base_map": {
+              "type": "osm"
+            },
+            "map_view": {
+              "zoom": 1,
+              "lat": 0,
+              "lng": 0
+            }
+          },
+          "queryType": "promql",
+          "queries": [
+            {
+              "query": "dummy_metrics{metric_name=\"request_rate\"}",
+              "customQuery": true,
+              "fields": {
+                "stream": "",
+                "stream_type": "metrics",
+                "x": [],
+                "y": [],
+                "z": [],
+                "filter": []
+              },
+              "config": {
+                "promql_legend": "",
+                "layer_type": "scatter",
+                "weight_fixed": 1,
+                "limit": 0,
+                "min": 0,
+                "max": 100
+              }
+            }
+          ],
+          "layout": {
+            "x": 0,
+            "y": 10,
+            "w": 24,
+            "h": 9,
+            "i": 3
+          }
+        },
+        {
+          "id": "Panel_ID3457210",
+          "type": "line",
+          "title": "Ingestion Rate (Events/sec)",
+          "description": "",
+          "config": {
+            "show_legends": true,
+            "legends_position": null,
+            "base_map": {
+              "type": "osm"
+            },
+            "map_view": {
+              "zoom": 1,
+              "lat": 0,
+              "lng": 0
+            }
+          },
+          "queryType": "promql",
+          "queries": [
+            {
+              "query": "sum_over_time(dummy_metrics{metric_name=\"ingestion_events_total\"}[1m]) / 60",
+              "customQuery": true,
+              "fields": {
+                "stream": "",
+                "stream_type": "metrics",
+                "x": [],
+                "y": [],
+                "z": [],
+                "filter": []
+              },
+              "config": {
+                "promql_legend": "",
+                "layer_type": "scatter",
+                "weight_fixed": 1,
+                "limit": 0,
+                "min": 0,
+                "max": 100
+              }
+            }
+          ],
+          "layout": {
+            "x": 24,
+            "y": 10,
+            "w": 24,
+            "h": 9,
+            "i": 4
+          }
+        }
+      ]
+    }
+  ]
+}

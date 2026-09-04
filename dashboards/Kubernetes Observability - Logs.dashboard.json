@@ -1,0 +1,233 @@
+{
+  "version": 3,
+  "dashboardId": "7501491247538766513",
+  "title": "Kubernetes Observability - Logs",
+  "description": "Kubernetes and dummy log observability dashboard",
+  "role": "",
+  "owner": "",
+  "created": "2026-09-04T09:11:34.508Z",
+  "tabs": [
+    {
+      "tabId": "default",
+      "name": "Default",
+      "panels": [
+        {
+          "id": "Panel_ID6695910",
+          "type": "line",
+          "title": "Log Volume Over Time",
+          "description": "",
+          "config": {
+            "show_legends": true,
+            "legends_position": null,
+            "decimals": 2,
+            "axis_border_show": false,
+            "legend_width": {
+              "unit": "px"
+            },
+            "base_map": {
+              "type": "osm"
+            },
+            "map_view": {
+              "zoom": 1,
+              "lat": 0,
+              "lng": 0
+            }
+          },
+          "queryType": "sql",
+          "queries": [
+            {
+              "query": "SELECT histogram(_timestamp) as \"x_axis_1\", count(_timestamp) as \"y_axis_1\"  FROM \"dummy_logs\"  GROUP BY x_axis_1 ORDER BY x_axis_1 ASC",
+              "customQuery": false,
+              "fields": {
+                "stream": "dummy_logs",
+                "stream_type": "logs",
+                "x": [
+                  {
+                    "label": "Timestamp",
+                    "alias": "x_axis_1",
+                    "column": "_timestamp",
+                    "color": null,
+                    "aggregationFunction": "histogram",
+                    "sortBy": "ASC"
+                  }
+                ],
+                "y": [
+                  {
+                    "label": "Timestamp",
+                    "alias": "y_axis_1",
+                    "column": "_timestamp",
+                    "color": "#5960b2",
+                    "aggregationFunction": "count"
+                  }
+                ],
+                "z": [],
+                "filter": []
+              },
+              "config": {
+                "promql_legend": "",
+                "layer_type": "scatter",
+                "weight_fixed": 1,
+                "limit": 0,
+                "min": 0,
+                "max": 100
+              }
+            }
+          ],
+          "layout": {
+            "x": 0,
+            "y": 0,
+            "w": 24,
+            "h": 9,
+            "i": 1
+          },
+          "htmlContent": "",
+          "markdownContent": ""
+        },
+        {
+          "id": "Panel_ID6150310",
+          "type": "pie",
+          "title": "Log Level Breakdown",
+          "description": "",
+          "config": {
+            "show_legends": true,
+            "legends_position": null,
+            "decimals": 2,
+            "axis_border_show": false,
+            "legend_width": {
+              "unit": "px"
+            },
+            "base_map": {
+              "type": "osm"
+            },
+            "map_view": {
+              "zoom": 1,
+              "lat": 0,
+              "lng": 0
+            }
+          },
+          "queryType": "sql",
+          "queries": [
+            {
+              "query": "SELECT level as \"x_axis_1\", count(_timestamp) as \"y_axis_1\"  FROM \"dummy_logs\"  GROUP BY x_axis_1",
+              "customQuery": false,
+              "fields": {
+                "stream": "dummy_logs",
+                "stream_type": "logs",
+                "x": [
+                  {
+                    "label": "Level",
+                    "alias": "x_axis_1",
+                    "column": "level",
+                    "color": null
+                  }
+                ],
+                "y": [
+                  {
+                    "label": "Timestamp",
+                    "alias": "y_axis_1",
+                    "column": "_timestamp",
+                    "color": "#5960b2",
+                    "aggregationFunction": "count"
+                  }
+                ],
+                "z": [],
+                "filter": []
+              },
+              "config": {
+                "promql_legend": "",
+                "layer_type": "scatter",
+                "weight_fixed": 1,
+                "limit": 0,
+                "min": 0,
+                "max": 100
+              }
+            }
+          ],
+          "layout": {
+            "x": 24,
+            "y": 0,
+            "w": 24,
+            "h": 9,
+            "i": 2
+          },
+          "htmlContent": "",
+          "markdownContent": ""
+        },
+        {
+          "id": "Panel_ID6535110",
+          "type": "bar",
+          "title": "Top Services",
+          "description": "",
+          "config": {
+            "show_legends": true,
+            "legends_position": null,
+            "decimals": 2,
+            "axis_border_show": false,
+            "legend_width": {
+              "unit": "px"
+            },
+            "base_map": {
+              "type": "osm"
+            },
+            "map_view": {
+              "zoom": 1,
+              "lat": 0,
+              "lng": 0
+            }
+          },
+          "queryType": "sql",
+          "queries": [
+            {
+              "query": "SELECT service as \"x_axis_1\", count(_timestamp) as \"y_axis_1\"  FROM \"dummy_logs\"  GROUP BY x_axis_1",
+              "customQuery": false,
+              "fields": {
+                "stream": "dummy_logs",
+                "stream_type": "logs",
+                "x": [
+                  {
+                    "label": "Service",
+                    "alias": "x_axis_1",
+                    "column": "service",
+                    "color": null
+                  }
+                ],
+                "y": [
+                  {
+                    "label": "Timestamp",
+                    "alias": "y_axis_1",
+                    "column": "_timestamp",
+                    "color": "#5960b2",
+                    "aggregationFunction": "count"
+                  }
+                ],
+                "z": [],
+                "filter": []
+              },
+              "config": {
+                "promql_legend": "",
+                "layer_type": "scatter",
+                "weight_fixed": 1,
+                "limit": 0,
+                "min": 0,
+                "max": 100
+              }
+            }
+          ],
+          "layout": {
+            "x": 0,
+            "y": 10,
+            "w": 24,
+            "h": 9,
+            "i": 3
+          },
+          "htmlContent": "",
+          "markdownContent": ""
+        }
+      ]
+    }
+  ],
+  "variables": {
+    "list": [],
+    "showDynamicFilters": true
+  }
+}
