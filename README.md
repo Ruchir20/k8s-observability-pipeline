@@ -38,7 +38,6 @@ Install and configure:
 
 Verify the tools:
 
-```bash
 aws --version
 terraform --version
 kubectl version --client
@@ -54,5 +53,4 @@ The project includes an alerting layer using OpenObserve.
 A scheduled OpenObserve alert monitors the `dummy_logs` stream and
 filters records where:
 
-```text
 level = error
