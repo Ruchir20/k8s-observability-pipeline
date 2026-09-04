@@ -5,30 +5,25 @@ A Kubernetes observability pipeline built on AWS EKS using Terraform, Vector, an
 ## Architecture- https://excalidraw.com/#json=TF9aD4XYDRDwcMQu6WsMg,y22rq-FJ7vNZiuLn7IY3Fw
 
 
-                         AWS
-                          |
-                    +-----------+
-                    |    EKS    |
-                    |           |
-                    |  4 Nodes  |
-                    +-----+-----+
-                          |
-                    +-----v-----+
-                    |   Vector  |
-                    | DaemonSet |
-                    +-----+-----+
-                          |
-              +-----------+-----------+
-              |                       |
-         Kubernetes Logs        Dummy Logs
-              |                       |
-              +-----------+-----------+
-                          |
-                    +-----v-----+
-                    |OpenObserve|
-                    +-----------+
-                     /         \
-              Logs Dashboard  Metrics Dashboard
+                    Kubernetes
+                        │
+                        ▼
+                Vector DaemonSet
+                  │           │
+                  ▼           ▼
+                Logs       Metrics
+                  │           │
+                  └─────┬─────┘
+                        ▼
+                  OpenObserve
+                 /      |      \
+                /       |       \
+               ▼        ▼        ▼
+          Logs DB   Metrics DB   Alerts
+               │        │          │
+               ▼        ▼          ▼
+           Dashboard Dashboard  Webhook
+
 
 ## Prerequisites
 
