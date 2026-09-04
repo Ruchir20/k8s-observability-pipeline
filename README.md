@@ -2,9 +2,9 @@
 
 A Kubernetes observability pipeline built on AWS EKS using Terraform, Vector, and OpenObserve.
 
-## Architecture
+## Architecture- https://excalidraw.com/#json=TF9aD4XYDRDwcMQu6WsMg,y22rq-FJ7vNZiuLn7IY3Fw
 
-```text
+
                          AWS
                           |
                     +-----------+
