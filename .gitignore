@@ -1,0 +1,27 @@
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+crash.log
+crash.*.log
+
+# Terraform lock file - keep this in Git
+# .terraform.lock.hcl is intentionally NOT ignored
+
+# OpenObserve chart package
+*.tgz
+
+# Kubernetes secrets
+*-secret.yaml
+secret.yaml
+
+# Local/editor files
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Backup files
+*.backup

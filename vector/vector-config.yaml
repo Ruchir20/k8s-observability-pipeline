@@ -1,0 +1,177 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vector-config
+  namespace: openobserve
+
+data:
+  vector.yaml: |
+    data_dir: /var/lib/vector
+
+    api:
+      enabled: true
+      address: "0.0.0.0:8686"    
+
+    sources:
+      kubernetes_logs:
+        type: kubernetes_logs
+
+      dummy_logs:
+        type: demo_logs
+        format: json
+        interval: 1
+
+      dummy_metrics:
+        type: static_metrics
+        interval_secs: 1
+        namespace: dummy
+        metrics:
+          - name: cpu_usage_percent
+            kind: absolute
+            tags:
+              service: dummy-service
+              environment: test
+            value:
+              gauge:
+                value: 42.5
+
+          - name: memory_usage_bytes
+            kind: absolute
+            tags:
+              service: dummy-service
+              environment: test
+            value:
+              gauge:
+                value: 524288000
+
+          - name: request_rate
+            kind: absolute
+            tags:
+              service: dummy-service
+              environment: test
+            value:
+              gauge:
+                value: 125.0
+
+          - name: ingestion_events_total
+            kind: incremental
+            tags:
+              service: vector
+              environment: test
+            value:
+              counter:
+                value: 1
+
+    transforms:
+      kubernetes_metadata:
+        type: remap
+        inputs:
+          - kubernetes_logs
+        source: |
+          .service = .kubernetes.pod_name
+          .namespace = .kubernetes.pod_namespace
+          .node = get_env_var!("VECTOR_SELF_NODE_NAME")
+          .log_source = "kubernetes"
+
+      dummy_metadata:
+        type: remap
+        inputs:
+          - dummy_logs
+        source: |
+          .service = "dummy-service"
+          .namespace = "dummy-logs"
+          .log_source = "dummy"
+
+          .parsed = parse_json!(.message)
+          .status_code = to_int!(.parsed.status)
+
+          if .status_code >= 500 {
+            .level = "error"
+          } else if .status_code >= 400 {
+            .level = "warn"
+          } else {
+            .level = "info"
+          }
+
+          del(.parsed)
+          del(.status_code)
+
+      dummy_metrics_to_log:
+        type: metric_to_log
+        inputs:
+          - dummy_metrics
+
+      dummy_metrics_metadata:
+        type: remap
+        inputs:
+          - dummy_metrics_to_log
+        source: |
+          .__name__ = "dummy_metrics"
+          .metric_name = .name
+          .service = .tags.service
+          .environment = .tags.environment
+
+          if .name == "ingestion_events_total" {
+            .__type__ = "counter"
+            .value = .counter.value
+          } else {
+            .__type__ = "gauge"
+            .value = .gauge.value
+          }
+
+          del(.counter)
+          del(.gauge)
+          del(.kind)
+          del(.name)
+          del(.namespace)
+          del(.tags)
+          del(.timestamp)
+                
+    sinks:
+      openobserve_kubernetes:
+        type: http
+        inputs:
+          - kubernetes_metadata
+        uri: http://openobserve.openobserve.svc.cluster.local/api/default/kubernetes/_json
+        method: post
+        encoding:
+          codec: json
+        auth:
+          strategy: basic
+          user: "${OPENOBSERVE_USERNAME}"
+          password: "${OPENOBSERVE_PASSWORD}"
+        request:
+          headers:
+            Content-Type: application/json
+
+      openobserve_dummy:
+        type: http
+        inputs:
+          - dummy_metadata
+        uri: http://openobserve.openobserve.svc.cluster.local/api/default/dummy_logs/_json
+        method: post
+        encoding:
+          codec: json
+        auth:
+          strategy: basic
+          user: "${OPENOBSERVE_USERNAME}"
+          password: "${OPENOBSERVE_PASSWORD}"
+        request:
+          headers:
+            Content-Type: application/json
+
+      openobserve_metrics:
+        type: http
+        inputs:
+          - dummy_metrics_metadata
+        uri: http://openobserve.openobserve.svc.cluster.local/api/default/ingest/metrics/_json
+        method: post
+        encoding:
+          codec: json
+        auth:
+          strategy: basic
+          user: "${OPENOBSERVE_USERNAME}"
+          password: "${OPENOBSERVE_PASSWORD}"
+        request:
+          headers:
+            Content-Type: application/json

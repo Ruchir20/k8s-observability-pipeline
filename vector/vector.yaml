@@ -1,0 +1,91 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: vector
+  namespace: openobserve
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: vector
+rules:
+  - apiGroups: [""]
+    resources:
+      - pods
+      - namespaces
+      - nodes
+    verbs: ["get", "list", "watch"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: vector
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: vector
+subjects:
+  - kind: ServiceAccount
+    name: vector
+    namespace: openobserve
+
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: vector
+  namespace: openobserve
+spec:
+  selector:
+    matchLabels:
+      app: vector
+  template:
+    metadata:
+      labels:
+        app: vector
+    spec:
+      serviceAccountName: vector
+
+      containers:
+        - name: vector
+          image: timberio/vector:0.50.0-alpine
+          args:
+            - "--config"
+            - "/etc/vector/vector.yaml"
+
+          env:
+            - name: OPENOBSERVE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: openobserve-credentials
+                  key: username
+
+            - name: OPENOBSERVE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: openobserve-credentials
+                  key: password
+
+            - name: VECTOR_SELF_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+
+          volumeMounts:
+            - name: config
+              mountPath: /etc/vector
+
+            - name: var-log
+              mountPath: /var/log
+              readOnly: true
+
+      volumes:
+        - name: config
+          configMap:
+            name: vector-config
+
+        - name: var-log
+          hostPath:
+            path: /var/log
