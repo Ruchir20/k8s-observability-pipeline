@@ -1,0 +1,26 @@
+{
+  "name": "High_Error_Rate",
+  "type": "scheduled",
+  "stream_type": "logs",
+  "stream_name": "dummy_logs",
+  "condition": {
+    "field": "level",
+    "operator": "=",
+    "value": "error"
+  },
+  "threshold": {
+    "operator": ">=",
+    "value": 10,
+    "unit": "times"
+  },
+  "period": {
+    "value": 5,
+    "unit": "minutes"
+  },
+  "silence_notification": {
+    "value": 10,
+    "unit": "minutes"
+  },
+  "destination": "OpenObserve_Webhook",
+  "description": "Alerts when 10 or more error-level dummy logs are detected within a 5-minute evaluation window."
+}
